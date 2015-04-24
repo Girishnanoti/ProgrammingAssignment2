@@ -19,24 +19,35 @@
 ## Writing function for making matrix and computing its inverse
 
 makeCacheMatrix<-function(x=matrix()){
+ 
+# initial value is NULL since nothing in cache, else hold cache value  
   Cachevalue<-NULL
   setmatrix<-function(y){
     x<<-y
+    
+# since the matrix is assigned a new value, flush the cache    
     Cachevalue<<-NULL
   }
   
-
+# returns the stored matrix
 
 getmatrix<-function(){
   x
 }
+
+# cache the given argument
+
 setinverse<-function(solve) {
   Cachevalue<<-solve
 }
 
+# get the cached value
+
 getinverse<-function(){
   Cachevalue
 }
+
+# return a list with each item of the list is a function
 list(setmatrix=setmatrix,getmatrix=getmatrix,
      setinverse=setinverse,
      getinverse=getinverse)
@@ -46,14 +57,25 @@ list(setmatrix=setmatrix,getmatrix=getmatrix,
 
 
 cachesolve<-function(y,...){
+# fetch cache value 
   Cachevalue<-y$getinverse()
+  
+# if a cache value exist return it
+
   if(!is.null(Cachevalue)){
     message('getting cached data')
     return(Cachevalue)
     
   }
+  
+# else to get the matrix, compute inverse and store  in cache
+   
+  
+  
   data<-y$getmatrix()
   Cachevalue<-solve(data)
   y$setinverse(Cachevalue)
+  
+# return the inverse
   Cachevalue
 }
